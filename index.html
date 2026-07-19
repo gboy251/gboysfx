@@ -1,0 +1,866 @@
+
+html_content = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GBOYS FX GROUP - Trade Smart. Grow Together.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              100: '#FFF8DC',
+              200: '#FFE066',
+              300: '#FFD700',
+              400: '#D4AF37',
+              500: '#C5A028',
+              600: '#B8860B',
+              700: '#8B6914',
+              800: '#5C4510',
+              900: '#2D2208',
+            },
+            dark: {
+              50: '#1A1A1A',
+              100: '#141414',
+              200: '#0F0F0F',
+              300: '#0A0A0A',
+              400: '#050505',
+              500: '#000000',
+            },
+            silver: {
+              100: '#F5F5F5',
+              200: '#E0E0E0',
+              300: '#C0C0C0',
+              400: '#A0A0A0',
+              500: '#808080',
+            }
+          },
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+          },
+          backgroundImage: {
+            'gold-gradient': 'linear-gradient(135deg, #D4AF37 0%, #FFD700 25%, #FFF8DC 50%, #D4AF37 75%, #B8860B 100%)',
+            'gold-shimmer': 'linear-gradient(90deg, #B8860B 0%, #FFD700 25%, #FFF 50%, #FFD700 75%, #B8860B 100%)',
+            'dark-gradient': 'linear-gradient(180deg, #0A0A0A 0%, #000000 100%)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Animated candlestick background */
+    .candle-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 0;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+    
+    .candlestick {
+      position: absolute;
+      bottom: 0;
+      width: 3px;
+      background: #D4AF37;
+      animation: growCandle 4s ease-in-out infinite;
+    }
+    
+    .candlestick::before {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: 20%;
+      width: 7px;
+      height: 60%;
+      background: #D4AF37;
+      border-radius: 1px;
+    }
+    
+    @keyframes growCandle {
+      0%, 100% { height: 60px; opacity: 0.3; }
+      50% { height: 120px; opacity: 0.8; }
+    }
+
+    /* Gold text shimmer */
+    .gold-text {
+      background: linear-gradient(135deg, #B8860B 0%, #FFD700 25%, #FFF8DC 50%, #FFD700 75%, #B8860B 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+
+    /* 3D Logo effect */
+    .logo-3d {
+      filter: drop-shadow(0 0 30px rgba(212,175,55,0.3)) drop-shadow(0 10px 40px rgba(0,0,0,0.8));
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .logo-3d:hover {
+      transform: perspective(1000px) rotateY(8deg) rotateX(-5deg) scale(1.05);
+    }
+
+    /* Card 3D flip */
+    .card-3d-container {
+      perspective: 1200px;
+      height: 340px;
+    }
+    
+    .card-3d {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    
+    .card-3d.flipped {
+      transform: rotateY(180deg);
+    }
+    
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Glass morphism */
+    .glass {
+      background: rgba(20, 20, 20, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #D4AF37;
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.6;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+      50% { transform: translateY(-40px) scale(1.5); opacity: 0.8; }
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Button glow */
+    .btn-glow {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-glow::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,215,0,0.3), transparent);
+      transform: rotate(45deg);
+      animation: btnShine 3s infinite;
+    }
+    
+    @keyframes btnShine {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 3px; }
+
+    /* Social icon hover */
+    .social-icon {
+      transition: all 0.3s ease;
+    }
+    .social-icon:hover {
+      transform: translateY(-5px);
+      filter: drop-shadow(0 5px 15px rgba(212,175,55,0.5));
+    }
+
+    /* Phone mockup */
+    .phone-mockup {
+      border: 3px solid #333;
+      border-radius: 40px;
+      padding: 8px;
+      background: #111;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body class="bg-dark-500 min-h-screen">
+
+  <!-- Animated Candlestick Background -->
+  <div class="candle-bg" id="candleBg"></div>
+
+  <!-- Floating Particles -->
+  <div id="particles" class="fixed inset-0 pointer-events-none z-10"></div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gold-gradient flex items-center justify-center">
+          <span class="font-orbitron font-bold text-black text-sm">GB</span>
+        </div>
+        <span class="font-orbitron font-bold text-gold-400 text-lg tracking-wider">GBOYS FX</span>
+      </a>
+      
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#brand" class="text-gray-300 hover:text-gold-400 transition-colors text-sm tracking-wide">BRAND</a>
+        <a href="#logo" class="text-gray-300 hover:text-gold-400 transition-colors text-sm tracking-wide">LOGO</a>
+        <a href="#cards" class="text-gray-300 hover:text-gold-400 transition-colors text-sm tracking-wide">CARDS</a>
+        <a href="#social" class="text-gray-300 hover:text-gold-400 transition-colors text-sm tracking-wide">CONNECT</a>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <button class="hidden md:block btn-glow bg-gold-gradient text-black font-orbitron font-bold px-6 py-2 rounded-full text-sm tracking-wider hover:shadow-[0_0_40px_rgba(212,175,55,0.5)] transition-shadow">
+          JOIN NOW
+        </button>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn" class="md:hidden text-gold-400 p-2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-72 h-full bg-dark-200 border-l border-gold-400/20 z-50 md:hidden">
+      <div class="p-6">
+        <button id="closeMenuBtn" class="text-gold-400 mb-8">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <div class="flex flex-col gap-6">
+          <a href="#brand" class="text-white font-orbitron text-lg hover:text-gold-400 transition-colors mobile-link">BRAND</a>
+          <a href="#logo" class="text-white font-orbitron text-lg hover:text-gold-400 transition-colors mobile-link">LOGO</a>
+          <a href="#cards" class="text-white font-orbitron text-lg hover:text-gold-400 transition-colors mobile-link">CARDS</a>
+          <a href="#social" class="text-white font-orbitron text-lg hover:text-gold-400 transition-colors mobile-link">CONNECT</a>
+          <button class="btn-glow bg-gold-gradient text-black font-orbitron font-bold px-6 py-3 rounded-full text-sm tracking-wider mt-4">
+            JOIN NOW
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="brand" class="relative min-h-screen flex items-center justify-center pt-20">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gold-900/5 to-transparent"></div>
+    
+    <div class="relative z-20 text-center px-6 max-w-5xl mx-auto">
+      <!-- 3D Logo -->
+      <div class="reveal mb-8">
+        <div class="logo-3d inline-block">
+          <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#B8860B"/>
+                <stop offset="25%" style="stop-color:#FFD700"/>
+                <stop offset="50%" style="stop-color:#FFF8DC"/>
+                <stop offset="75%" style="stop-color:#FFD700"/>
+                <stop offset="100%" style="stop-color:#B8860B"/>
+              </linearGradient>
+              <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#808080"/>
+                <stop offset="25%" style="stop-color:#E0E0E0"/>
+                <stop offset="50%" style="stop-color:#FFFFFF"/>
+                <stop offset="75%" style="stop-color:#E0E0E0"/>
+                <stop offset="100%" style="stop-color:#808080"/>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            
+            <!-- Outer G Ring -->
+            <circle cx="140" cy="140" r="110" stroke="url(#goldGrad)" stroke-width="16" fill="none" 
+                    stroke-linecap="round" stroke-dasharray="520 173" transform="rotate(-90 140 140)"
+                    filter="url(#glow)"/>
+            
+            <!-- Inner B Letter -->
+            <path d="M100 80 L100 200 L155 200 C175 200 190 185 190 165 C190 150 180 140 165 137 C178 134 185 122 185 108 C185 92 172 80 155 80 Z" 
+                  fill="url(#silverGrad)" stroke="url(#goldGrad)" stroke-width="3" filter="url(#glow)"/>
+            <path d="M125 100 L125 130 L150 130 C160 130 165 125 165 115 C165 105 160 100 150 100 Z" fill="#0A0A0A"/>
+            <path d="M125 150 L125 180 L152 180 C162 180 167 175 167 165 C167 155 162 150 152 150 Z" fill="#0A0A0A"/>
+            
+            <!-- Arrow swoosh -->
+            <path d="M 170 200 Q 210 180 230 140 Q 250 100 260 70" 
+                  stroke="url(#goldGrad)" stroke-width="6" fill="none" stroke-linecap="round"
+                  filter="url(#glow)"/>
+            <polygon points="255,60 270,75 250,85" fill="url(#goldGrad)" filter="url(#glow)"/>
+            
+            <!-- Candlesticks -->
+            <rect x="185" y="100" width="8" height="35" rx="2" fill="url(#goldGrad)" filter="url(#glow)"/>
+            <rect x="183" y="95" width="12" height="3" rx="1" fill="url(#goldGrad)" filter="url(#glow)"/>
+            <rect x="183" y="137" width="12" height="3" rx="1" fill="url(#goldGrad)" filter="url(#glow)"/>
+            
+            <rect x="205" y="85" width="8" height="45" rx="2" fill="#E0E0E0" filter="url(#glow)"/>
+            <rect x="203" y="80" width="12" height="3" rx="1" fill="#E0E0E0" filter="url(#glow)"/>
+            <rect x="203" y="132" width="12" height="3" rx="1" fill="#E0E0E0" filter="url(#glow)"/>
+            
+            <rect x="225" y="70" width="8" height="55" rx="2" fill="url(#goldGrad)" filter="url(#glow)"/>
+            <rect x="223" y="65" width="12" height="3" rx="1" fill="url(#goldGrad)" filter="url(#glow)"/>
+            <rect x="223" y="127" width="12" height="3" rx="1" fill="url(#goldGrad)" filter="url(#glow)"/>
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="reveal font-orbitron font-black text-5xl md:text-7xl lg:text-8xl tracking-wider mb-4" style="transition-delay: 0.1s">
+        <span class="gold-text">GBOYS</span> <span class="text-white">FX</span>
+      </h1>
+      
+      <div class="reveal flex items-center justify-center gap-4 mb-6" style="transition-delay: 0.2s">
+        <div class="h-px w-16 bg-gold-400/50"></div>
+        <span class="font-orbitron text-gold-400 tracking-[0.4em] text-sm md:text-base">GROUP</span>
+        <div class="h-px w-16 bg-gold-400/50"></div>
+      </div>
+      
+      <p class="reveal font-inter text-gray-400 text-lg md:text-xl tracking-[0.3em] uppercase mb-12" style="transition-delay: 0.3s">
+        Trade Smart. Grow Together.
+      </p>
+
+      <div class="reveal flex flex-col sm:flex-row gap-4 justify-center" style="transition-delay: 0.4s">
+        <a href="https://t.me/GBOYSFXGROUP" target="_blank" class="btn-glow bg-gold-gradient text-black font-orbitron font-bold px-10 py-4 rounded-full text-sm tracking-widest hover:shadow-[0_0_50px_rgba(212,175,55,0.6)] transition-all transform hover:scale-105 text-center">
+          START TRADING
+        </a>
+        <a href="#logo" class="border border-gold-400/50 text-gold-400 font-orbitron font-bold px-10 py-4 rounded-full text-sm tracking-widest hover:bg-gold-400/10 hover:border-gold-400 transition-all text-center">
+          LEARN MORE
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-8 mt-20" style="transition-delay: 0.5s">
+        <div class="glass rounded-2xl p-6">
+          <div class="font-orbitron text-3xl md:text-4xl font-bold gold-text">5K+</div>
+          <div class="text-gray-500 text-xs tracking-widest mt-2 uppercase">Traders</div>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="font-orbitron text-3xl md:text-4xl font-bold gold-text">94%</div>
+          <div class="text-gray-500 text-xs tracking-widest mt-2 uppercase">Win Rate</div>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="font-orbitron text-3xl md:text-4xl font-bold gold-text">24/7</div>
+          <div class="text-gray-500 text-xs tracking-widest mt-2 uppercase">Support</div>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="font-orbitron text-3xl md:text-4xl font-bold gold-text">$2M+</div>
+          <div class="text-gray-500 text-xs tracking-widest mt-2 uppercase">Profits</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo Showcase Section -->
+  <section id="logo" class="relative py-32 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal text-center mb-20">
+        <span class="text-gold-400 text-xs tracking-[0.4em] uppercase">Brand Identity</span>
+        <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-4">LOGO <span class="gold-text">EVOLUTION</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Logo Variation 1 -->
+        <div class="reveal glass rounded-3xl p-8 text-center group hover:border-gold-400/40 transition-all">
+          <div class="bg-dark-300 rounded-2xl p-10 mb-6 group-hover:shadow-[0_0_40px_rgba(212,175,55,0.15)] transition-shadow">
+            <svg width="120" height="120" viewBox="0 0 280 280" fill="none" class="mx-auto">
+              <circle cx="140" cy="140" r="110" stroke="url(#goldGrad)" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="520 173" transform="rotate(-90 140 140)"/>
+              <path d="M100 80 L100 200 L155 200 C175 200 190 185 190 165 C190 150 180 140 165 137 C178 134 185 122 185 108 C185 92 172 80 155 80 Z" fill="url(#silverGrad)" stroke="url(#goldGrad)" stroke-width="3"/>
+              <path d="M125 100 L125 130 L150 130 C160 130 165 125 165 115 C165 105 160 100 150 100 Z" fill="#0A0A0A"/>
+              <path d="M125 150 L125 180 L152 180 C162 180 167 175 167 165 C167 155 162 150 152 150 Z" fill="#0A0A0A"/>
+              <path d="M 170 200 Q 210 180 230 140 Q 250 100 260 70" stroke="url(#goldGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <polygon points="255,60 270,75 250,85" fill="url(#goldGrad)"/>
+            </svg>
+          </div>
+          <h3 class="font-orbitron text-gold-400 font-bold text-lg">PRIMARY</h3>
+          <p class="text-gray-500 text-sm mt-2">Full color on dark</p>
+        </div>
+
+        <!-- Logo Variation 2 -->
+        <div class="reveal glass rounded-3xl p-8 text-center group hover:border-gold-400/40 transition-all" style="transition-delay: 0.1s">
+          <div class="bg-gold-100 rounded-2xl p-10 mb-6 group-hover:shadow-[0_0_40px_rgba(212,175,55,0.3)] transition-shadow">
+            <svg width="120" height="120" viewBox="0 0 280 280" fill="none" class="mx-auto">
+              <circle cx="140" cy="140" r="110" stroke="#B8860B" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="520 173" transform="rotate(-90 140 140)"/>
+              <path d="M100 80 L100 200 L155 200 C175 200 190 185 190 165 C190 150 180 140 165 137 C178 134 185 122 185 108 C185 92 172 80 155 80 Z" fill="#333" stroke="#B8860B" stroke-width="3"/>
+              <path d="M125 100 L125 130 L150 130 C160 130 165 125 165 115 C165 105 160 100 150 100 Z" fill="#FFF8DC"/>
+              <path d="M125 150 L125 180 L152 180 C162 180 167 175 167 165 C167 155 162 150 152 150 Z" fill="#FFF8DC"/>
+              <path d="M 170 200 Q 210 180 230 140 Q 250 100 260 70" stroke="#B8860B" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <polygon points="255,60 270,75 250,85" fill="#B8860B"/>
+            </svg>
+          </div>
+          <h3 class="font-orbitron text-gold-400 font-bold text-lg">LIGHT VERSION</h3>
+          <p class="text-gray-500 text-sm mt-2">For light backgrounds</p>
+        </div>
+
+        <!-- Logo Variation 3 -->
+        <div class="reveal glass rounded-3xl p-8 text-center group hover:border-gold-400/40 transition-all" style="transition-delay: 0.2s">
+          <div class="bg-dark-300 rounded-2xl p-10 mb-6 group-hover:shadow-[0_0_40px_rgba(212,175,55,0.15)] transition-shadow">
+            <svg width="120" height="120" viewBox="0 0 280 280" fill="none" class="mx-auto">
+              <circle cx="140" cy="140" r="110" stroke="#D4AF37" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="520 173" transform="rotate(-90 140 140)"/>
+              <path d="M100 80 L100 200 L155 200 C175 200 190 185 190 165 C190 150 180 140 165 137 C178 134 185 122 185 108 C185 92 172 80 155 80 Z" fill="none" stroke="#D4AF37" stroke-width="3"/>
+              <path d="M125 100 L125 130 L150 130 C160 130 165 125 165 115 C165 105 160 100 150 100 Z" fill="#D4AF37"/>
+              <path d="M125 150 L125 180 L152 180 C162 180 167 175 167 165 C167 155 162 150 152 150 Z" fill="#D4AF37"/>
+              <path d="M 170 200 Q 210 180 230 140 Q 250 100 260 70" stroke="#D4AF37" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <polygon points="255,60 270,75 250,85" fill="#D4AF37"/>
+            </svg>
+          </div>
+          <h3 class="font-orbitron text-gold-400 font-bold text-lg">MONOCHROME</h3>
+          <p class="text-gray-500 text-sm mt-2">Single color usage</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Cards Section -->
+  <section id="cards" class="relative py-32 px-6 bg-dark-300/50">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal text-center mb-20">
+        <span class="text-gold-400 text-xs tracking-[0.4em] uppercase">Professional</span>
+        <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-4">BUSINESS <span class="gold-text">CARDS</span></h2>
+        <p class="text-gray-500 mt-4 max-w-md mx-auto">Click the card to flip and see both sides</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        <!-- Card 1 -->
+        <div class="reveal card-3d-container mx-auto" style="max-width: 520px;">
+          <div class="card-3d" onclick="this.classList.toggle('flipped')">
+            <!-- Front -->
+            <div class="card-face bg-gradient-to-br from-dark-100 to-dark-300 border border-gold-400/20">
+              <!-- Gold corner accents -->
+              <div class="absolute top-0 right-0 w-24 h-24 bg-gold-gradient" style="clip-path: polygon(100% 0, 0 0, 100% 100%);"></div>
+              <div class="absolute bottom-0 left-0 w-24 h-24 bg-gold-gradient" style="clip-path: polygon(0 100%, 0 0, 100% 100%);"></div>
+              
+              <!-- Subtle candlestick watermark -->
+              <div class="absolute inset-0 opacity-5">
+                <svg width="100%" height="100%" viewBox="0 0 400 240">
+                  <rect x="50" y="100" width="6" height="60" fill="#D4AF37"/>
+                  <rect x="80" y="80" width="6" height="80" fill="#D4AF37"/>
+                  <rect x="110" y="120" width="6" height="40" fill="#D4AF37"/>
+                  <rect x="140" y="60" width="6" height="100" fill="#D4AF37"/>
+                  <rect x="170" y="90" width="6" height="70" fill="#D4AF37"/>
+                  <rect x="200" y="110" width="6" height="50" fill="#D4AF37"/>
+                  <rect x="230" y="70" width="6" height="90" fill="#D4AF37"/>
+                  <rect x="260" y="100" width="6" height="60" fill="#D4AF37"/>
+                  <rect x="290" y="85" width="6" height="75" fill="#D4AF37"/>
+                  <rect x="320" y="105" width="6" height="55" fill="#D4AF37"/>
+                </svg>
+              </div>
+              
+              <div class="relative z-10 h-full flex flex-col items-center justify-center p-8">
+                <svg width="100" height="100" viewBox="0 0 280 280" fill="none">
+                  <circle cx="140" cy="140" r="110" stroke="url(#goldGrad)" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="520 173" transform="rotate(-90 140 140)"/>
+                  <path d="M100 80 L100 200 L155 200 C175 200 190 185 190 165 C190 150 180 140 165 137 C178 134 185 122 185 108 C185 92 172 80 155 80 Z" fill="url(#silverGrad)" stroke="url(#goldGrad)" stroke-width="3"/>
+                  <path d="M125 100 L125 130 L150 130 C160 130 165 125 165 115 C165 105 160 100 150 100 Z" fill="#0A0A0A"/>
+                  <path d="M125 150 L125 180 L152 180 C162 180 167 175 167 165 C167 155 162 150 152 150 Z" fill="#0A0A0A"/>
+                  <path d="M 170 200 Q 210 180 230 140 Q 250 100 260 70" stroke="url(#goldGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+                  <polygon points="255,60 270,75 250,85" fill="url(#goldGrad)"/>
+                </svg>
+                
+                <h3 class="font-orbitron text-2xl font-bold gold-text mt-6 tracking-wider">GBOYS FX</h3>
+                <div class="flex items-center gap-3 mt-2">
+                  <div class="h-px w-8 bg-gold-400/50"></div>
+                  <span class="font-orbitron text-gold-400 text-xs tracking-[0.4em]">GROUP</span>
+                  <div class="h-px w-8 bg-gold-400/50"></div>
+                </div>
+                <p class="text-gray-500 text-xs tracking-[0.3em] mt-4 uppercase">Trade Smart. Grow Together.</p>
+              </div>
+            </div>
+            
+            <!-- Back -->
+            <div class="card-face card-back bg-gradient-to-br from-dark-100 to-dark-300 border border-gold-400/20">
+              <div class="relative z-10 h-full flex flex-col justify-between p-8">
+                <div>
+                  <h3 class="font-orbitron text-xl font-bold text-white tracking-wider">GBOYS FX GROUP</h3>
+                  <p class="text-gold-400 text-xs tracking-[0.3em] mt-1 uppercase">Trade Smart. Grow Together.</p>
+                  <div class="h-px w-20 bg-gold-gradient mt-3"></div>
+                </div>
+                
+                <div class="space-y-4 mt-6">
+                  <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div>
+                      <div class="text-white text-sm font-semibold">GBOY</div>
+                      <div class="text-gray-500 text-xs">Founder & Trader</div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </div>
+                    <div class="text-gray-400 text-sm">+251 9XX XXX XXX</div>
+                  </div>
+                  
+                  <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                    <div class="text-gray-400 text-sm">gboysfxgroup@gmail.com</div>
+                  </div>
+                  
+                  <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </div>
+                    <div class="text-gray-400 text-sm">gboysfxgroup.com</div>
+                  </div>
+                  
+                  <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-400/20 flex items-center justify-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <div class="text-gray-400 text-sm">We Trade. We Learn. We Win.</div>
+                  </div>
+                </div>
+                
+                <div class="flex items-center justify-between mt-6">
+                  <div class="flex gap-3">
+                    <a href="https://t.me/GBOYSFXGROUP" target="_blank" class="w-8 h-8 rounded-full bg-gold-gradient flex items-center justify-center social-icon cursor-pointer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    </a>
+                    <a href="https://instagram.com/GBOYSFXGROUP" target="_blank" class="w-8 h-8 rounded-full bg-gold-gradient flex items-center justify-center social-icon cursor-pointer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                    <a href="https://youtube.com/@GBOYSFXGROUP" target="_blank" class="w-8 h-8 rounded-full bg-gold-gradient flex items-center justify-center social-icon cursor-pointer">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                    </a>
+                  </div>
+                  <span class="text-gold-400 text-xs font-semibold">@GBOYSFXGROUP</span>
+                </div>
+                
+                <!-- Watermark logo -->
+                <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-5">
+                  <svg width="80" height="80" viewBox="0 0 280 280" fill="none">
+                    <circle cx="140" cy="140" r="110" stroke="#fff" stroke-width="12" fill="none"/>
+                    <path d="M100 80 L100 200 L155 200 C175 200 190 185 190 165 C190 150 180 140 165 137 C178 134 185 122 185 108 C185 92 172 80 155 80 Z" fill="#fff"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="text-center text-gray-500 text-sm mt-4">Click to flip</p>
+        </div>
+
+        <!-- Card 2 - Digital Version -->
+        <div class="reveal glass rounded-3xl p-8" style="transition-delay: 0.2s">
+          <h3 class="font-orbitron text-gold-400 font-bold text-lg mb-6 text-center">DIGITAL PROFILE</h3>
+          
+          <div class="phone-mockup mx-auto" style="max-width: 320px;">
+            <div class="bg-dark-300 rounded-[32px] overflow-hidden">
+              <!-- Phone Header -->
+              <div class="bg-gold-gradient p-6 text-center">
+                <div class="w-20 h-20 rounded-full bg-dark-300 mx-auto flex items-center justify-center border-4 border-gold-400">
+                  <svg width="50" height="50" viewBox="0 0 280 280" fill="none">
+                    <circle cx="140" cy="140" r="110" stroke="url(#goldGrad)" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="520 173" transform="rotate(-90 140 140)"/>
+                    <path d="M100 80 L100 200 L155 200 C175 200 190 185 190 165 C190 150 180 140 165 137 C178 134 185 122 185 108 C185 92 172 80 155 80 Z" fill="url(#silverGrad)" stroke="url(#goldGrad)" stroke-width="3"/>
+                    <path d="M125 100 L125 130 L150 130 C160 130 165 125 165 115 C165 105 160 100 150 100 Z" fill="#0A0A0A"/>
+                    <path d="M125 150 L125 180 L152 180 C162 180 167 175 167 165 C167 155 162 150 152 150 Z" fill="#0A0A0A"/>
+                    <path d="M 170 200 Q 210 180 230 140 Q 250 100 260 70" stroke="url(#goldGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <polygon points="255,60 270,75 250,85" fill="url(#goldGrad)"/>
+                  </svg>
+                </div>
+                <h4 class="font-orbitron font-bold text-black mt-3 text-lg">GBOYS FX</h4>
+                <p class="text-black/70 text-xs">Founder & Trader</p>
+              </div>
+              
+              <!-- Phone Body -->
+              <div class="p-6 space-y-4">
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-dark-100/50">
+                  <div class="w-10 h-10 rounded-full bg-gold-400/20 flex items-center justify-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </div>
+                  <div class="text-gray-300 text-sm">+251 9XX XXX XXX</div>
+                </div>
+                
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-dark-100/50">
+                  <div class="w-10 h-10 rounded-full bg-gold-400/20 flex items-center justify-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </div>
+                  <div class="text-gray-300 text-sm text-xs">gboysfxgroup@gmail.com</div>
+                </div>
+                
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-dark-100/50">
+                  <div class="w-10 h-10 rounded-full bg-gold-400/20 flex items-center justify-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                  </div>
+                  <div class="text-gray-300 text-sm">gboysfxgroup.com</div>
+                </div>
+                
+                <a href="https://t.me/GBOYSFXGROUP" target="_blank" class="block w-full bg-gold-gradient text-black font-orbitron font-bold py-3 rounded-xl text-sm tracking-wider mt-4 text-center hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] transition-shadow">
+                  CONNECT
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color Palette -->
+  <section class="relative py-32 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal text-center mb-20">
+        <span class="text-gold-400 text-xs tracking-[0.4em] uppercase">Design System</span>
+        <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-4">COLOR <span class="gold-text">PALETTE</span></h2>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="reveal group">
+          <div class="h-32 rounded-2xl bg-gold-gradient shadow-[0_0_30px_rgba(212,175,55,0.3)] group-hover:scale-105 transition-transform"></div>
+          <div class="mt-4">
+            <div class="font-orbitron font-bold text-white">GOLD</div>
+            <div class="text-gray-500 text-xs mt-1">#D4AF37 · Primary</div>
+          </div>
+        </div>
+        <div class="reveal group" style="transition-delay: 0.1s">
+          <div class="h-32 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-400 shadow-lg group-hover:scale-105 transition-transform"></div>
+          <div class="mt-4">
+            <div class="font-orbitron font-bold text-white">SILVER</div>
+            <div class="text-gray-500 text-xs mt-1">#C0C0C0 · Secondary</div>
+          </div>
+        </div>
+        <div class="reveal group" style="transition-delay: 0.2s">
+          <div class="h-32 rounded-2xl bg-gradient-to-br from-gray-900 to-black border border-gray-800 shadow-lg group-hover:scale-105 transition-transform"></div>
+          <div class="mt-4">
+            <div class="font-orbitron font-bold text-white">ONYX BLACK</div>
+            <div class="text-gray-500 text-xs mt-1">#0A0A0A · Background</div>
+          </div>
+        </div>
+        <div class="reveal group" style="transition-delay: 0.3s">
+          <div class="h-32 rounded-2xl bg-gradient-to-br from-white to-gray-200 shadow-lg group-hover:scale-105 transition-transform"></div>
+          <div class="mt-4">
+            <div class="font-orbitron font-bold text-white">PURE WHITE</div>
+            <div class="text-gray-500 text-xs mt-1">#FFFFFF · Text</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Connect Section -->
+  <section id="social" class="relative py-32 px-6 bg-dark-300/50">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal text-center mb-20">
+        <span class="text-gold-400 text-xs tracking-[0.4em] uppercase">Community</span>
+        <h2 class="font-orbitron text-4xl md:text-5xl font-bold mt-4">CONNECT <span class="gold-text">WITH US</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <a href="https://t.me/GBOYSFXGROUP" target="_blank" class="reveal glass rounded-3xl p-8 text-center group hover:border-gold-400/40 transition-all hover:-translate-y-2">
+          <div class="w-16 h-16 rounded-2xl bg-gold-gradient mx-auto flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-shadow">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </div>
+          <h3 class="font-orbitron font-bold text-white text-lg">TELEGRAM</h3>
+          <p class="text-gold-400 text-sm mt-2">@GBOYSFXGROUP</p>
+          <p class="text-gray-500 text-xs mt-3">Daily signals & market analysis</p>
+        </a>
+
+        <a href="https://instagram.com/GBOYSFXGROUP" target="_blank" class="reveal glass rounded-3xl p-8 text-center group hover:border-gold-400/40 transition-all hover:-translate-y-2" style="transition-delay: 0.1s">
+          <div class="w-16 h-16 rounded-2xl bg-gold-gradient mx-auto flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-shadow">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </div>
+          <h3 class="font-orbitron font-bold text-white text-lg">INSTAGRAM</h3>
+          <p class="text-gold-400 text-sm mt-2">@GBOYSFXGROUP</p>
+          <p class="text-gray-500 text-xs mt-3">Behind the scenes & lifestyle</p>
+        </a>
+
+        <a href="https://youtube.com/@GBOYSFXGROUP" target="_blank" class="reveal glass rounded-3xl p-8 text-center group hover:border-gold-400/40 transition-all hover:-translate-y-2" style="transition-delay: 0.2s">
+          <div class="w-16 h-16 rounded-2xl bg-gold-gradient mx-auto flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-shadow">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+          </div>
+          <h3 class="font-orbitron font-bold text-white text-lg">YOUTUBE</h3>
+          <p class="text-gold-400 text-sm mt-2">@GBOYSFXGROUP</p>
+          <p class="text-gray-500 text-xs mt-3">Tutorials & strategy breakdowns</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative py-16 px-6 border-t border-gold-400/10">
+    <div class="max-w-7xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="w-12 h-12 rounded-full bg-gold-gradient flex items-center justify-center">
+          <span class="font-orbitron font-bold text-black text-lg">GB</span>
+        </div>
+        <span class="font-orbitron font-bold text-gold-400 text-2xl tracking-wider">GBOYS FX</span>
+      </div>
+      <p class="text-gray-500 text-sm tracking-widest uppercase mb-8">Trade Smart. Grow Together.</p>
+      <div class="flex justify-center gap-6 mb-8">
+        <a href="https://t.me/GBOYSFXGROUP" target="_blank" class="text-gray-500 hover:text-gold-400 transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </a>
+        <a href="https://instagram.com/GBOYSFXGROUP" target="_blank" class="text-gray-500 hover:text-gold-400 transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://youtube.com/@GBOYSFXGROUP" target="_blank" class="text-gray-500 hover:text-gold-400 transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+        </a>
+      </div>
+      <div class="text-gray-600 text-xs">
+        © 2026 GBOYS FX GROUP. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Generate candlestick background
+    const candleBg = document.getElementById('candleBg');
+    for (let i = 0; i < 40; i++) {
+      const candle = document.createElement('div');
+      candle.className = 'candlestick';
+      candle.style.left = `${Math.random() * 100}%`;
+      candle.style.height = `${40 + Math.random() * 100}px`;
+      candle.style.animationDelay = `${Math.random() * 4}s`;
+      candle.style.animationDuration = `${3 + Math.random() * 3}s`;
+      candleBg.appendChild(candle);
+    }
+
+    // Generate floating particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = `${Math.random() * 100}%`;
+      particle.style.animationDelay = `${Math.random() * 6}s`;
+      particle.style.animationDuration = `${4 + Math.random() * 4}s`;
+      particlesContainer.appendChild(particle);
+    }
+
+    // Scroll reveal
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+        // Close mobile menu if open
+        document.getElementById('mobileMenu').classList.remove('open');
+      });
+    });
+
+    // Parallax effect on mouse move for hero
+    document.addEventListener('mousemove', (e) => {
+      const logo = document.querySelector('.logo-3d');
+      if (logo) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 10;
+        const y = (e.clientY / window.innerHeight - 0.5) * 10;
+        logo.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+      }
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('open');
+    });
+
+    closeMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>'''
+
+# Save to output directory
+with open('/mnt/agents/output/gboys_fx_website.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("File saved successfully!")
+print(f"File size: {len(html_content):,} characters")
